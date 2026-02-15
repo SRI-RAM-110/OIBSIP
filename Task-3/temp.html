@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Temperature Converter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Temperature Converter</h2>
+
+    <div class="row">
+        <div class="input-group">
+            <label>Degrees</label>
+            <input type="text" id="temperature" placeholder="Enter value">
+        </div>
+
+        <div class="input-group">
+            <label>Type</label>
+            <select id="type">
+                <option value="celsius">Celsius</option>
+                <option value="fahrenheit">Fahrenheit</option>
+                <option value="kelvin">Kelvin</option>
+            </select>
+        </div>
+    </div>
+
+    <button onclick="convertTemperature()">Convert</button>
+
+    <div class="result-box" id="result">
+        Result will appear here
+    </div>
+
+    <div class="error" id="error"></div>
+</div>
+
+<script>
+function convertTemperature() {
+    const tempInput = document.getElementById("temperature").value;
+    const type = document.getElementById("type").value;
+    const resultDiv = document.getElementById("result");
+    const errorDiv = document.getElementById("error");
+
+    errorDiv.textContent = "";
+
+    if (tempInput === "" || isNaN(tempInput)) {
+        errorDiv.textContent = "Please enter a valid number!";
+        resultDiv.textContent = "Result will appear here";
+        return;
+    }
+
+    const temp = parseFloat(tempInput);
+    let resultText = "";
+
+    if (type === "celsius") {
+        const f = (temp * 9/5) + 32;
+        const k = temp + 273.15;
+        resultText = `${f.toFixed(2)} °F | ${k.toFixed(2)} K`;
+    }
+    else if (type === "fahrenheit") {
+        const c = (temp - 32) * 5/9;
+        const k = c + 273.15;
+        resultText = `${c.toFixed(2)} °C | ${k.toFixed(2)} K`;
+    }
+    else if (type === "kelvin") {
+        const c = temp - 273.15;
+        const f = (c * 9/5) + 32;
+        resultText = `${c.toFixed(2)} °C | ${f.toFixed(2)} °F`;
+    }
+
+    resultDiv.textContent = resultText;
+}
+</script>
+
+</body>
+</html>
