@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List Web App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>To-Do List Web App</h1>
+</header>
+
+<div class="main">
+
+    <div class="form-card">
+        <input type="text" id="title" placeholder="Title" required>
+        <textarea id="description" placeholder="Description" required></textarea>
+        <button class="save-btn" onclick="addTask()">Save</button>
+    </div>
+
+    <div class="task-section">
+        <div class="task-header">
+            <span>Title</span>
+            <span>Description</span>
+            <span>Delete</span>
+        </div>
+        <hr>
+        <div id="taskList"></div>
+    </div>
+
+</div>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function addTask() {
+    const title = document.getElementById("title").value.trim();
+    const desc = document.getElementById("description").value.trim();
+
+    if (!title || !desc) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    tasks.push({
+        id: Date.now(),
+        title,
+        desc
+    });
+
+    saveTasks();
+    renderTasks();
+
+    document.getElementById("title").value = "";
+    document.getElementById("description").value = "";
+}
+
+function deleteTask(id) {
+    tasks = tasks.filter(task => task.id !== id);
+    saveTasks();
+    renderTasks();
+}
+
+function renderTasks() {
+    const list = document.getElementById("taskList");
+    list.innerHTML = "";
+
+    tasks.forEach(task => {
+        const row = document.createElement("div");
+        row.className = "task-row";
+
+        row.innerHTML = `
+            <span>${task.title}</span>
+            <span>${task.desc}</span>
+            <button class="delete-btn" onclick="deleteTask(${task.id})">X</button>
+        `;
+
+        list.appendChild(row);
+    });
+}
+
+renderTasks();
+</script>
+
+</body>
+</html>
